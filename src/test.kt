@@ -1,17 +1,4 @@
-
-fun main(vararg args: String) {
-    ('가'..'힣').forEach {
-        println("$it : ${it.splitKorean()}")
-    }
-//    lorenIpsum.forEach {
-//        if (it.toInt() in KOREAN_FIRST_CODE..KOREAN_LAST_CODE) {
-//            val consonant = KOREAN_CONSONANT_TABLE[getKoreanIndexConsonant(it)]
-//            val vowel = KOREAN_VOWEL_TABLE[getKoreanIndexVowel(it)]
-//            val batchim = KOREAN_CONSONANT_TABLE.getOrElse(getKoreanIndexBatchim(it)) { ' ' }
-//            println("$it : $consonant, $vowel, $batchim")
-//        }
-//    }
-}
+import com.park9eon.korean.separationKorean
 
 val lorenIpsum = """
 이성은 구하지 위하여, 하는 투명하되 쓸쓸하랴? 속에서 인생을 청춘을 청춘의 할지니, 작고 구하기 사랑의 사막이다. 고동을 가치를 이성은 때에, 피어나기 청춘 않는 보배를 그들의 봄바람이다. 우리 있는 없으면, 끓는 청춘의 봄바람이다. 꾸며 날카로우나 없으면, 것이 이상 할지니, 스며들어 것이다. 든 설레는 지혜는 앞이 아니한 보라. 있는 아니한 그들은 품고 주며, 작고 청춘을 것이다. 구하지 너의 내는 것이다. 뭇 새가 못할 풍부하게 우리 뿐이다.
@@ -29,44 +16,11 @@ val lorenIpsum = """
 가치를 위하여 놀이 무엇을 거선의 위하여서, 작고 가진 우리 황금시대다. 보내는 현저하게 영원히 바이며, 있으랴? 인생을 온갖 대한 별과 위하여, 우리 이것이다. 생의 거친 무엇을 동산에는 이상 피에 이것이다. 과실이 노래하며 그것은 것이다. 설레는 열매를 그들은 하여도 아니한 자신과 품으며, 심장의 만천하의 듣는다. 행복스럽고 사는가 품었기 풍부하게 보이는 이것이다. 작고 이상은 열락의 것이다. 돋고, 것이다.보라, 더운지라 작고 트고, 뭇 꽃이 이것이다. 있는 바이며, 사라지지 얼마나 구하기 얼음과 사람은 가슴이 뿐이다. 튼튼하며, 타오르고 있는 커다란 이상은 반짝이는 이상은 보라.
 """
 
-val KOREAN_CONSONANT_LIST: List<Char> = listOf('ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ')
-val KOREAN_VOWEL_LIST: List<Char> = listOf('ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ')
-val KOREAN_BATCHIM_LIST: List<Char?> = listOf(null, 'ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ', 'ㅊ','ㅋ','ㅌ','ㅍ','ㅎ')
-
-val KOREAN_FIRST: Char = '가'
-val KOREAN_LAST: Char = '힣'
-
-// 자음 Index를 가져옴.
-fun getKoreanIndexConsonant(korean: Char): Int = korean.toInt().let { koreanCode ->
-    return koreanCode.minus(KOREAN_FIRST.toInt())
-            .div(KOREAN_BATCHIM_LIST.size)
-            .div(KOREAN_VOWEL_LIST.size)
-}
-// 모음 Index를 가져옴.
-fun getKoreanIndexVowel(korean: Char): Int = korean.toInt().let { koreanCode ->
-    return koreanCode.minus(KOREAN_FIRST.toInt())
-            .div(KOREAN_BATCHIM_LIST.size)
-            .rem(KOREAN_VOWEL_LIST.size)
-}
-// 받침 Index를 가져옴
-fun getKoreanIndexBatchim(korean: Char): Int = korean.toInt().let { koreanCode ->
-    return koreanCode.minus(KOREAN_FIRST.toInt())
-            .rem(KOREAN_BATCHIM_LIST.size)
-}
-
-fun Char.splitKorean(): Triple<Char?, Char?, Char?>? {
-    return if (this in KOREAN_FIRST..KOREAN_LAST) {
-        val consonant = KOREAN_CONSONANT_LIST[getKoreanIndexConsonant(this)]
-        val vowel = KOREAN_VOWEL_LIST[getKoreanIndexVowel(this)]
-        val batchim = KOREAN_BATCHIM_LIST[getKoreanIndexBatchim(this)]
-        return Triple(consonant, vowel, batchim)
-    } else if (this in KOREAN_CONSONANT_LIST) {
-        Triple(this, null, null)
-    } else if (this in KOREAN_VOWEL_LIST) {
-        Triple(null, this, null)
-    } else if (this in KOREAN_BATCHIM_LIST) {
-        Triple(null, null, this)
-    } else {
-        null
+fun main(vararg args: String) {
+    ('가'..'힣').forEach {
+        println("$it : ${it.separationKorean()}")
+    }
+    lorenIpsum.forEach {
+        println("$it : ${it.separationKorean()}")
     }
 }
